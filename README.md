@@ -17,7 +17,6 @@ https://github.com/user-attachments/assets/4eb22305-7762-404e-9093-806b6a155ede
 - No widgets, no themes. Just bevy UI serialized with all the tools necessary to build anything
   in a reusable manor.
 - Optional `bevy_picking` support: `picking`
-
 ```
 features = ["picking"]
 ```
@@ -26,7 +25,6 @@ features = ["picking"]
 
 | bevy | bevy_hui |
 | ---: | -------: |
-| 0.17 |     main |
 | 0.16 |      0.4 |
 | 0.15 |      0.3 |
 

@@ -115,6 +115,7 @@ pub enum Action {
     OnExit(Vec<String>),
     OnSpawn(Vec<String>),
     OnChange(Vec<String>),
+    OnChangeMouseUp(Vec<String>),
 }
 
 impl Action {
@@ -134,6 +135,9 @@ impl Action {
             }
             Action::OnChange(fn_id) => {
                 cmd.insert(crate::prelude::OnUiChange(fn_id));
+            }
+            Action::OnChangeMouseUp(fn_id) => {
+                cmd.insert(crate::prelude::OnUiChangeMouseUp(fn_id));
             }
         }
     }

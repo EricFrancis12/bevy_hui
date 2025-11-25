@@ -60,7 +60,7 @@ pub fn run_animations(
             continue;
         }
 
-        if active_animation.timer.is_finished() {
+        if active_animation.timer.finished() {
             let atlas = node.texture_atlas.as_mut().unwrap();
             let atlas_details = style.computed.atlas.as_ref().unwrap();
 

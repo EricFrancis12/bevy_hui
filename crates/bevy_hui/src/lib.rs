@@ -24,7 +24,7 @@ pub mod prelude {
         ComponentBindings, FunctionBindings, HtmlComponents, HtmlFunctions, UiChangedEvent,
     };
     pub use crate::build::{
-        HtmlNode, OnUiChange, OnUiEnter, OnUiExit, OnUiPress, OnUiSpawn, Tags, TemplateProperties,
+        HtmlNode, OnUiChange, OnUiChangeMouseUp, OnUiEnter, OnUiExit, OnUiPress, OnUiSpawn, Tags, TemplateProperties,
         TemplateScope, UiId, UiTarget, UiWatch,
     };
     pub use crate::compile::{CompileContextEvent, CompileNodeEvent};

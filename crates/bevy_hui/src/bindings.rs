@@ -1,8 +1,6 @@
 use crate::{build::HtmlNode, data::HtmlTemplate};
 use bevy::{
-    ecs::system::{EntityCommands, SystemId, SystemParam},
-    platform::collections::HashMap,
-    prelude::*,
+    ecs::system::{EntityCommands, SystemId, SystemParam}, platform::collections::HashMap, prelude::*
 };
 
 pub struct BindingPlugin;
@@ -10,7 +8,7 @@ impl Plugin for BindingPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<FunctionBindings>()
             .init_resource::<ComponentBindings>()
-            // .add_event::<UiChangedEvent>()
+            .add_event::<UiChangedEvent>()
             .add_systems(Update, (observe_interactions, observe_on_spawn))
             .add_observer(observe_node_changed);
     }
@@ -25,9 +23,7 @@ impl Plugin for BindingPlugin {
 /// commonly used to build widgets like sliders/input that should
 /// react to any change
 #[derive(Event)]
-pub struct UiChangedEvent {
-    pub entity: Entity,
-}
+pub struct UiChangedEvent;
 
 pub type SpawnFunction = dyn Fn(EntityCommands) + Send + Sync + 'static;
 
@@ -189,12 +185,12 @@ fn observe_interactions(
 /// runs any attached `on_change` function when the user
 /// triggers the [UiChangedEvent] on the target enttiy.
 fn observe_node_changed(
-    trigger: On<UiChangedEvent>,
+    trigger: Trigger<UiChangedEvent>,
     mut cmd: Commands,
     on_change: Query<&crate::prelude::OnUiChange>,
     function_bindings: Res<FunctionBindings>,
 ) {
-    let entity = trigger.event().entity;
+    let entity = trigger.target();
 
     let Ok(funcs) = on_change.get(entity) else {
         return;

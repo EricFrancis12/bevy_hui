@@ -12,14 +12,14 @@ impl Plugin for HuiSelectWidgetPlugin {
         app.register_type::<SelectInput>();
         app.register_type::<SelectOption>();
         app.register_type::<SelectionChangedEvent>();
-        app.add_message::<SelectionChangedEvent>();
+        app.add_event::<SelectionChangedEvent>();
         app.add_systems(Startup, setup);
         app.add_systems(
             Update,
             (
                 open_list,
                 selection,
-                update_selection.run_if(on_message::<SelectionChangedEvent>),
+                update_selection.run_if(on_event::<SelectionChangedEvent>),
             ),
         );
     }
@@ -38,7 +38,7 @@ pub struct SelectOption {
     select: Entity,
 }
 
-#[derive(Message, Reflect, Debug)]
+#[derive(Event, Reflect, Debug)]
 #[reflect]
 pub struct SelectionChangedEvent {
     pub select: Entity,
@@ -88,7 +88,7 @@ fn open_list(
 }
 
 fn selection(
-    mut events: MessageWriter<SelectionChangedEvent>,
+    mut events: EventWriter<SelectionChangedEvent>,
     options: Query<(Entity, &ChildOf, &Interaction, &SelectOption), Changed<Interaction>>,
     mut styles: Query<&mut HtmlStyle>,
 ) {
@@ -111,7 +111,7 @@ fn selection(
 
 fn update_selection(
     mut cmd: Commands,
-    mut events: MessageReader<SelectionChangedEvent>,
+    mut events: EventReader<SelectionChangedEvent>,
     mut texts: Query<&mut Text>,
     children: Query<&Children>,
     tags: Query<&Tags>,
@@ -138,8 +138,6 @@ fn update_selection(
             .map(|tags| tags.get("value").map(|s| s.as_str()).unwrap_or_default())
             .map(|t| text.0 = t.into());
 
-        cmd.trigger(UiChangedEvent {
-            entity: event.select,
-        });
+        cmd.trigger_targets(UiChangedEvent, event.select);
     }
 }

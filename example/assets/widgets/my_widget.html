@@ -1,0 +1,47 @@
+<template>
+  <property name="title">Default Title</property>
+
+  <node
+    display="flex"
+    flex_direction="column"
+    justify_content="center"
+    align_items="center"
+    width="100%"
+    height="100%"
+  >
+    <node display="flex" flex_direction="column" padding="10px">
+      <text font_size="20">{title}</text>
+      <node width="300px" column_gap="5px">
+        <slider
+          target="h0"
+          on_change="notify_slider_change"
+          on_change_mouse_up="notify_slider_mouse_up"
+          p_axis="y"
+          p_width="20px"
+          p_height="255px"
+        >
+          <text id="h0" font_size="20">0.00</text>
+        </slider>
+
+        <slider
+          target="h1"
+          on_change="notify_slider_change"
+          on_change_mouse_up="notify_slider_mouse_up"
+          p_axis="x"
+          p_width="255px"
+          p_height="20px"
+        >
+        </slider>
+        <text id="h1" font_size="20">0.00</text>
+      </node>
+      <button
+        on_press="on_button_press"
+        background="#fff"
+        width="120px"
+        height="20px"
+      >
+        Click Here
+      </button>
+    </node>
+  </node>
+</template>

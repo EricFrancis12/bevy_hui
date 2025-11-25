@@ -3,17 +3,18 @@ use crate::animation::{AnimationDirection, Atlas};
 use crate::data::{Action, AttrTokens, Attribute, FontReference, HtmlTemplate, StyleAttr, XNode};
 use crate::prelude::NodeType;
 use crate::util::SlotMap;
+use bevy::log::info;
 use bevy::math::{Rect, UVec2, Vec2};
 use bevy::platform::collections::HashMap;
 use bevy::prelude::EaseFunction;
 use bevy::sprite::{BorderRect, SliceScaleMode, TextureSlicer};
-use bevy::text::{Justify, LineBreak, TextLayout};
-use bevy::ui::widget::{NodeImageMode, TextShadow};
+use bevy::text::{JustifyText, LineBreak, TextLayout};
+use bevy::ui::widget::NodeImageMode;
 use bevy::ui::{
     AlignContent, AlignItems, AlignSelf, Display, FlexDirection, FlexWrap, GlobalZIndex,
     GridAutoFlow, GridPlacement, GridTrack, JustifyContent, JustifyItems, JustifySelf, Outline,
     Overflow, OverflowAxis, OverflowClipBox, OverflowClipMargin, PositionType, RepeatedGridTrack,
-    ZIndex,
+    TextShadow, ZIndex,
 };
 use bevy::{
     color::Color,
@@ -389,6 +390,10 @@ where
         b"on_change" => {
             let (_, list) = as_string_list(value)?;
             Ok((key, Attribute::Action(Action::OnChange(list))))
+        }
+        b"on_change_mouse_up" => {
+            let (_, list) = as_string_list(value)?;
+            Ok((key, Attribute::Action(Action::OnChangeMouseUp(list))))
         }
         _ => {
             let (_, style) = parse_style(prefix, key, value, loader)?;
@@ -768,7 +773,7 @@ where
     E: ParseError<&'a [u8]> + ContextError<&'a [u8]>,
 {
     context(
-        "flex_direction has no valid value. Try `row` `column` `column_reverse` `row_reverse` `default`",
+        "flex_direction has no valid value. Try `auto` `center` `start` `stretch` `end` `baseline`",
         alt((
             map(tag("row"), |_| FlexDirection::Row),
             map(tag("column"), |_| FlexDirection::Column),
@@ -1568,17 +1573,17 @@ where
     Ok((input, TextLayout::new(justify, linebreak)))
 }
 
-fn parse_justify_text<'a, E>(input: &'a [u8]) -> IResult<&'a [u8], Justify, E>
+fn parse_justify_text<'a, E>(input: &'a [u8]) -> IResult<&'a [u8], JustifyText, E>
 where
     E: ParseError<&'a [u8]> + ContextError<&'a [u8]>,
 {
     context(
         "is not a valid justify text",
         alt((
-            map(tag("left"), |_| Justify::Left),
-            map(tag("center"), |_| Justify::Center),
-            map(tag("justified"), |_| Justify::Justified),
-            map(tag("right"), |_| Justify::Right),
+            map(tag("left"), |_| JustifyText::Left),
+            map(tag("center"), |_| JustifyText::Center),
+            map(tag("justified"), |_| JustifyText::Justified),
+            map(tag("right"), |_| JustifyText::Right),
         )),
     )(input)
 }

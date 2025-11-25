@@ -200,10 +200,7 @@ impl<'w, 's> UiStyleQuery<'w, 's> {
         }
 
         _ = self.border_color.get_mut(entity).map(|mut color| {
-            color.right = computed.border_color;
-            color.left = computed.border_color;
-            color.top = computed.border_color;
-            color.bottom = computed.border_color;
+            color.0 = computed.border_color;
         });
     }
 
@@ -271,13 +268,10 @@ impl<'w, 's> UiStyleQuery<'w, 's> {
                 style.border = lerp_rect(&computed.node.border, ui_rect, ratio)
             }
             StyleAttr::BorderColor(color) => {
-                _ = self.border_color.get_mut(entity).map(|mut bcolor| {
-                    let color = lerp_color(&computed.border_color, color, ratio);
-                    bcolor.right = color;
-                    bcolor.left = color;
-                    bcolor.top = color;
-                    bcolor.bottom = color;
-                });
+                _ = self
+                    .border_color
+                    .get_mut(entity)
+                    .map(|mut bcolor| bcolor.0 = lerp_color(&computed.border_color, color, ratio));
             }
             StyleAttr::BorderRadius(ui_rect) => {
                 _ = self.border_radius.get_mut(entity).map(|mut bradius| {
@@ -322,11 +316,10 @@ impl<'w, 's> UiStyleQuery<'w, 's> {
                 });
             }
             StyleAttr::TextLayout(text_layout) => {
-                _ = self
-                    .text_layouts
-                    .get_mut(entity)
-                    .map(|mut tl| *tl = *text_layout)
-            }
+                _ = self.text_layouts.get_mut(entity).map(|mut tl|{
+                    *tl = *text_layout
+                })
+            },
             StyleAttr::FontSize(s) => {
                 _ = self.text_fonts.get_mut(entity).map(|mut txt| {
                     txt.font_size = computed.font_size.lerp(*s, ratio);

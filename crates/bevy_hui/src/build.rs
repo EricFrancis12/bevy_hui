@@ -166,6 +166,10 @@ pub struct OnUiExit(pub Vec<String>);
 #[reflect]
 pub struct OnUiChange(pub Vec<String>);
 
+#[derive(Component, Debug, Deref, DerefMut, Reflect)]
+#[reflect]
+pub struct OnUiChangeMouseUp(pub Vec<String>);
+
 /// Html Ui Node
 /// pass it a handle, it will spawn an UI.
 #[derive(Component, Debug, Default, Deref, DerefMut, Reflect)]
@@ -175,7 +179,7 @@ pub struct HtmlNode(pub Handle<HtmlTemplate>);
 
 fn hotreload(
     mut cmd: Commands,
-    mut events: MessageReader<AssetEvent<HtmlTemplate>>,
+    mut events: EventReader<AssetEvent<HtmlTemplate>>,
     templates: Query<(Entity, &HtmlNode)>,
     sloted_nodes: Query<(Entity, &InsideSlot)>,
 ) {
@@ -287,9 +291,7 @@ fn spawn_ui(
             if let Some(node) = template.root.first() {
                 builder.build_tree(node);
                 builder.finalize_relations();
-                cmd.trigger(CompileContextEvent {
-                    entity: root_entity,
-                });
+                cmd.trigger_targets(CompileContextEvent, root_entity);
             } else {
                 warn!("template has no root node!");
             }

@@ -1,26 +1,12 @@
 <template>
-    <image
-        display="grid"
-        image_mode="12px 5px 5px 5px tile(1) tile(1) 4"
-        src="ui_panel_window.png"
-        border="2px"
-        margin="10px"
-        padding="60px 30px 30px 30px"
-        row_gap="15px"
-    >
+    <property name="title">Chopper Fight</property>
+
+    <image display="grid" image_mode="12px tile(1) tile(1) 4" src="ui_panel_window.png" border="2px" margin="10px"
+        padding="60px 30px 30px 30px" row_gap="15px">
         <text font_size="32">Widget Demo Scene</text>
-        <image
-            src="ui_panel.png"
-            image_mode="5px tile(1) tile(1) 4"
-            padding="30px"
-            display="grid"
-            row_gap="5px"
-        >
-            <text font_size="20">Minimal slider</text>
-            <node
-                column_gap="5px"
-                height="200px"
-            >
+        <image src="ui_panel.png" image_mode="5px tile(1) tile(1) 4" padding="30px" display="grid" row_gap="5px">
+            <text font_size="20">{title}</text>
+            <node column_gap="5px" height="200px">
                 <vslider target="t0" on_change="notify_slider_change">
                     <text id="t0" font_size="20">0.00</text>
                 </vslider>
@@ -53,17 +39,17 @@
 
         <node display="grid">
             <text font_size="20">Minimal input</text>
-            <input on_change="notify_input_change"/>
+            <input on_change="notify_input_change" />
         </node>
 
 
         <node display="grid">
             <text font_size="20">Minimal select</text>
             <select on_change="notify_select_change">
-				<option value="option 1" />
-				<option value="option 2" />
-				<option value="option 3" />
-			</select>
+                <option value="option 1"></option>
+                <option value="option 2"></option>
+                <option value="option 3"></option>
+            </select>
         </node>
     </image>
 </template>
